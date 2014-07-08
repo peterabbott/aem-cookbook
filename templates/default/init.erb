@@ -13,17 +13,7 @@
 # is subtly different from the CQSE variant - check diffs for
 # more info.
 #---------------------------------------------------------------------
-<% @aem_options.keys.sort.each do |key| %>
-<%=   key %>=<%= @aem_options[key] %>
-<% end %>
-CQ_JVM_OPTS="<%= @jvm_opts.join " " %>"
-
-CQ_JAR_OPTS="<%= @jar_opts.join " " %>"
-
-DEFAULT_CQ_CONTEXT=<%= @default_context %>
-
-CQ_RUNNABLE_JAR=<%= @runnable_jar %>
-
+[ -f "/etc/default/<%=@service_name%>" ] && . /etc/default/<%=@service_name%>
 #---------------------------------------------------------------------
 # Don't edit below here
 #---------------------------------------------------------------------

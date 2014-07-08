@@ -35,8 +35,8 @@ end
 
 #because apache_module does not create .load file for debian because they are normally installed with apt-get
 if platform_family?('ubuntu', 'debian')
-  file "#{node['apache']['dir']}/mods-available/#{params[:name]}.load" do
-      content "LoadModule dispatcher_module <%= node['apache']['libexecdir'] %>/mod_dispatcher.so\n"
+  file "#{node['apache']['dir']}/mods-available/dispatcher.load" do
+      content "LoadModule dispatcher_module #{node['apache']['libexecdir']}/mod_dispatcher.so\n"
       mode    '0644'
     end  
 end
@@ -45,19 +45,17 @@ end
 apache_module "dispatcher" do
   #this will use the template mods/dispatcher.conf.erb
   conf true
-  identifier dispatcher_module
-  filename 'mod_dispatcher.so'
 end
 
-#this is where our provider will put the farm config files
-farm_dir =  "#{node[:apache][:dir]}/conf/aem-farms"
-node.default[:aem][:dispatcher][:farm_dir] = farm_dir
+farm_dir = "#{node[:aem][:dispatcher][:farm_dir]}"
 
 directory farm_dir do
   owner "root"
   group node[:apache][:root_group]
   mode "0775"
   action :create
+  recursive true
+  not_if { ::File.exists?(farm_dir) }
 end
 
 #directory for sessionmanagement
@@ -69,7 +67,27 @@ directory "#{node[:apache][:dir]}/dispatcher/sessions" do
   action :create
 end
 
-template "#{node[:apache][:dir]}/conf/dispatcher.any" do
+conf_dir = File.dirname("#{node[:aem][:dispatcher][:conf_file]}")
+directory conf_dir do
+  owner "root"
+  group node[:apache][:root_group]
+  mode "0775"
+  action :create
+  recursive true
+  not_if { ::File.exists?(conf_dir) }
+end
+
+log_dir = File.dirname("#{node[:aem][:dispatcher][:log_file]}")
+directory conf_dir do
+  owner "root"
+  group node[:apache][:root_group]
+  mode "0775"
+  action :create
+  recursive true
+  not_if { ::File.exists?(log_dir) }
+end
+
+template "#{node[:aem][:dispatcher][:conf_file]}" do
   source "dispatcher.any.erb"
   owner "root"
   group node[:apache][:root_group]

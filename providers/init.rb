@@ -28,10 +28,22 @@ action :add do
   #take value passed to provider, or node attribute
   var_list.each do |var|
     vars[var] = new_resource.send(var) || node[:aem][var]
+
   end
+  
+  vars[:service_name] = service_name;
+
   template "/etc/init.d/#{service_name}" do
     cookbook 'aem'
     source 'init.erb'
+    mode '0755'
+    variables(vars)
+    notifies :restart, resources(:service => "#{service_name}")
+  end
+
+  template "/etc/default/#{service_name}" do
+    cookbook 'aem'
+    source 'aem-init-defaults.erb'
     mode '0755'
     variables(vars)
     notifies :restart, resources(:service => "#{service_name}")
