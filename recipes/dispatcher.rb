@@ -37,6 +37,8 @@ end
 apache_module "dispatcher" do
   #this will use the template mods/dispatcher.conf.erb
   conf true
+  identifier dispatcher_module
+  filename 'mod_dispatcher.so'
 end
 
 #this is where our provider will put the farm config files

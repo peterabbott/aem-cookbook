@@ -20,7 +20,7 @@
 include_attribute "apache2"
 
 default[:aem][:version] = nil
-default[:aem][:jvm_opts] = {}
+default[:aem][:jvm_opts] = []
 default[:aem][:jar_opts] = []
 default[:aem][:enable_webdav] = false
 default[:aem][:jar_name] = nil
@@ -63,7 +63,7 @@ default[:aem][:author] = {
   :port => "4502",
   :runnable_jar => "aem-author-p4502.jar",
   :base_dir => "/opt/aem/author/crx-quickstart",
-  :jvm_opts => {},
+  :jvm_opts => [],
   :ldap => {
     :enabled => false,
     :options => {}
@@ -109,7 +109,7 @@ default[:aem][:publish] = {
   :port => "4503",
   :runnable_jar => "aem-publish-p4503.jar",
   :base_dir => "/opt/aem/publish/crx-quickstart",
-  :jvm_opts => {},
+  :jvm_opts => [],
   :ldap => {
     :enabled => false,
     :options => {}
