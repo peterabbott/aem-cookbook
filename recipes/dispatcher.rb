@@ -33,6 +33,14 @@ aem_dispatcher 'mod_dispatcher.so' do
   action :install
 end
 
+#because apache_module does not create .load file for debian because they are normally installed with apt-get
+if platform_family?('ubuntu', 'debian')
+  file "#{node['apache']['dir']}/mods-available/#{params[:name]}.load" do
+      content "LoadModule dispatcher_module <%= node['apache']['libexecdir'] %>/mod_dispatcher.so\n"
+      mode    '0644'
+    end  
+end
+
 #if we want to support non-apache, we'll need to do some more work here
 apache_module "dispatcher" do
   #this will use the template mods/dispatcher.conf.erb
