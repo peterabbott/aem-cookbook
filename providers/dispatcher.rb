@@ -53,8 +53,12 @@ action :install do
           notifies :restart, service_name
         end
       else
+        log "message" do
+          message "File name test #{filename} "
+          level :info
+        end
         # extract out the module.so
-        ark filename do
+        ark ::File.basename(filename) do
           url dispatcher_uri
           checksum dispatcher_checksum
           creates "modules/dispatcher-#{webserver_type}-*#{dispatcher_version}.so"
