@@ -5,6 +5,7 @@ This cookbook installs and configures [Adobe Experience Manager (AEM)](http://ww
 ## Supported Platforms
 
 * CentOS
+* Ubuntu / Debian
 
 ## Supported Versions
 
