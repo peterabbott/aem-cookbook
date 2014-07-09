@@ -55,17 +55,28 @@ action :install do
       else
         
         log "message" do
-          message "Fetching remote file: #{filename} "
+          message "Fetching remote file for #{dispatcher_uri}"
           level :info
         end
 
-        # extract out the module.so
-        ark ::File.basename(filename) do
-          url dispatcher_uri
+        #replaced ark implementation as it constantly failed
+
+        remote_file "#{Chef::Config[:file_cache_path]}/dispatcher-#{webserver_type}-#{dispatcher_version}.tar.gz" do
+          source dispatcher_uri
           checksum dispatcher_checksum
-          creates "modules/dispatcher-#{webserver_type}-*#{dispatcher_version}.so"
-          path apache_libexecdir
-          action :cherry_pick
+          action :create
+        end
+        
+        bash "extract-module-so" do
+          user 'root'
+          group 'root'
+          cwd  "#{Chef::Config[:file_cache_path]}"
+          code <<-EOH
+/bin/tar xvfz dispatcher-#{webserver_type}-#{dispatcher_version}.tar.gz -C #{apache_libexecdir} #{dispatcher_file_path}
+chmod 0644 #{local_file_path}
+chown root:root #{local_file_path}
+          EOH
+          not_if {::File.exists?(local_file_path)}
         end
       end
 
@@ -84,6 +95,7 @@ action :install do
     link "#{node[:apache][:libexecdir]}/mod_dispatcher.so" do
       to local_file_path
       notifies :restart, service_name
+      only_if {::File.exists?(local_file_path)}
     end
   end
 end

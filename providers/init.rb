@@ -44,7 +44,7 @@ action :add do
   template "/etc/default/#{service_name}" do
     cookbook 'aem'
     source 'aem-init-defaults.erb'
-    mode '0755'
+    mode '0644'
     variables(vars)
     notifies :restart, resources(:service => "#{service_name}")
   end
