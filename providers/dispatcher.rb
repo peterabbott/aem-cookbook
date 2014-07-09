@@ -53,10 +53,12 @@ action :install do
           notifies :restart, service_name
         end
       else
+        
         log "message" do
-          message "File name test #{filename} "
+          message "Fetching remote file: #{filename} "
           level :info
         end
+
         # extract out the module.so
         ark ::File.basename(filename) do
           url dispatcher_uri
