@@ -52,25 +52,29 @@ service "aem-author" do
   #init script returns 0 for status no matter what
   status_command "service aem-author status | grep running"
   supports :status => true, :stop => true, :start => true, :restart => true
-  action [ :enable, :start ]
+  action [ :enable, node[:aem][:notification_service_command] ]
 end
 
-if node[:aem][:version].to_f > 5.4
-  node[:aem][:author][:validation_urls].each do |url|
-    aem_url_watcher url do
-      validation_url url
-      status_command "service aem-author status | grep running"
-      max_attempts node[:aem][:author][:startup][:max_attempts]
-      wait_between_attempts node[:aem][:author][:startup][:wait_between_attempts]
-      user node[:aem][:author][:admin_user]
-      password node[:aem][:author][:admin_password]
-      action :wait
+unless node[:aem][:bootstrap_only]
+  if node[:aem][:version].to_f > 5.4
+    node[:aem][:author][:validation_urls].each do |url|
+      aem_url_watcher url do
+        validation_url url
+        status_command "service aem-author status | grep running"
+        max_attempts node[:aem][:author][:startup][:max_attempts]
+        wait_between_attempts node[:aem][:author][:startup][:wait_between_attempts]
+        user node[:aem][:author][:admin_user]
+        password node[:aem][:author][:admin_password]
+        action :wait
+      end
+      
     end
-  end
-else
-  aem_port_watcher "4502" do
-    status_command "service aem-author status | grep running"
-    action :wait
+  else
+    aem_port_watcher "4502" do
+      status_command "service aem-author status | grep running"
+      action :wait
+      not_if {node[:aem][:bootstrap_only]}
+    end
   end
 end
 
@@ -120,7 +124,7 @@ if node[:aem][:version].to_f < 5.5 then
     group user
     mode "0644"
     action :create
-    notifies :restart, "service[aem-author]"
+    notifies node[:aem][:notification_service_command], "service[aem-author]"
   end
 end
 
@@ -139,6 +143,7 @@ node[:aem][:author][:deploy_pkgs].each do |pkg|
     properties_file pkg[:properties_file]
     version_pattern pkg[:version_pattern]
     action pkg[:action]
+    copy_install_path "#{node[:aem][:author][:base_dir]}/repository/install"
   end
 end
 

@@ -33,12 +33,13 @@ action :add do
   
   vars[:service_name] = service_name;
 
+  #check if we only want to boostrap or start
   template "/etc/init.d/#{service_name}" do
     cookbook 'aem'
     source 'init.erb'
     mode '0755'
     variables(vars)
-    notifies :restart, resources(:service => "#{service_name}")
+    notifies node[:aem][:notification_service_command], resources(:service => "#{service_name}"), :delayed
   end
 
   template "/etc/default/#{service_name}" do
@@ -46,6 +47,7 @@ action :add do
     source 'aem-init-defaults.erb'
     mode '0644'
     variables(vars)
-    notifies :restart, resources(:service => "#{service_name}")
+    notifies node[:aem][:notification_service_command], resources(:service => "#{service_name}"), :delayed
   end
+
 end

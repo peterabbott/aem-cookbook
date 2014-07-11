@@ -58,4 +58,11 @@ action :install do
     cwd vars[:default_context]
     code "java -jar #{jar_name} -unpack"
   end unless Object::File.exists?("#{vars[:default_context]}/crx-quickstart")
+
+  directory "#{vars[:default_context]}/crx-quickstart/repository/install" do
+      owner "crx"
+      mode "0755"
+      recursive true
+  end unless Object::File.exists?("#{vars[:default_context]}/crx-quickstart/repository/install")
+
 end

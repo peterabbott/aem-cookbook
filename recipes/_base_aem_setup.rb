@@ -16,6 +16,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+if node[:aem][:bootstrap_only]
+  log "Running Bootrstrap only mode"
+
+  node.default[:aem][:notification_service_command] = :nothing
+else 
+  log "Running Full startup mode"
+
+  node.default[:aem][:notification_service_command] = :restart
+end
+
 unless node['aem']['license_url']
   Chef::Application.fatal! 'aem.license_url attribute cannot be nil. Please populate that attribute.'
 end

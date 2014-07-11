@@ -41,7 +41,7 @@ action :enable do
     source 'ldap_login.conf.erb'
     mode '0644'
     variables(vars)
-    notifies :restart, resources(:service => "aem-#{instance_name}")
+    notifies node[:aem][:notification_service_command], resources(:service => "aem-#{instance_name}")
   end
 
   #add the JVM option to use ldap, it will get added to startup script.

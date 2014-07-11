@@ -53,6 +53,8 @@ def set_vars
                        "service/.json/etc/packages/#{vars[:group_id]}/" +
                        "#{vars[:file_name]}?cmd=uninstall"
 
+  vars[:copy_install_path] = new_resource.copy_install_path
+
   vars
 end
 
@@ -189,4 +191,15 @@ action :uninstall do
   uninstall.run_command
   uninstall.error!
   log uninstall.stdout
+end
+
+action :copy do
+  vars = set_vars()
+
+  r = remote_file "#{vars[:copy_install_path]}/#{vars[:file_name]}" do
+    source vars[:download_url]
+    mode 0755
+    action :nothing
+  end
+  r.run_action(:create)
 end

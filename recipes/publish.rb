@@ -52,8 +52,9 @@ service "aem-publish" do
   #init script returns 0 for status no matter what
   status_command "service aem-publish status | grep running"
   supports :status => true, :stop => true, :start => true, :restart => true
-  action [:enable, :start]
+  action [:enable, node[:aem][:notification_service_command] ]
 end
+
 
 if node[:aem][:version].to_f > 5.4
   node[:aem][:publish][:validation_urls].each do |url|
@@ -66,13 +67,16 @@ if node[:aem][:version].to_f > 5.4
       password node[:aem][:publish][:admin_password]
       action :wait
     end
+    not_if {node[:aem][:bootstrap_only]}
   end
 else
   aem_port_watcher "4503" do
     status_command "service aem-publish status | grep running"
     action :wait
+    not_if {node[:aem][:bootstrap_only]}
   end
 end
+
 
 #Change admin password
 unless node[:aem][:publish][:new_admin_password].nil?
@@ -121,7 +125,7 @@ if node[:aem][:version].to_f < 5.5 then
     group user
     mode "0644"
     action :create
-    notifies :restart, "service[aem-publish]"
+    notifies node[:aem][:notification_service_command], "service[aem-publish]"
   end
 end
 
@@ -140,6 +144,7 @@ node[:aem][:publish][:deploy_pkgs].each do |pkg|
     properties_file pkg[:properties_file]
     version_pattern pkg[:version_pattern]
     action pkg[:action]
+    copy_install_path "#{node[:aem][:publish][:base_dir]}/repository/install"
   end
 end
 
