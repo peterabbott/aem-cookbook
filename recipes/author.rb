@@ -149,7 +149,7 @@ end
 
 
 #Remove author agents that aren't listed
-unless node[:aem][:bootstrap_only] do 
+unless node[:aem][:bootstrap_only] 
   aem_replicator "delete_extra_replication_agents" do
     local_user node[:aem][:author][:admin_user]
     local_password node[:aem][:author][:admin_password]
