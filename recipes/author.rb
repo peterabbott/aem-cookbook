@@ -149,40 +149,42 @@ end
 
 
 #Remove author agents that aren't listed
-aem_replicator "delete_extra_replication_agents" do
-  local_user node[:aem][:author][:admin_user]
-  local_password node[:aem][:author][:admin_password]
-  local_port node[:aem][:author][:port]
-  remote_hosts node[:aem][:author][:replication_hosts]
-  dynamic_cluster node[:aem][:author][:find_replication_hosts_dynamically]
-  cluster_name node[:aem][:cluster_name]
-  cluster_role node[:aem][:publish][:cluster_role]
-  type :agent
-  action :remove
-end
+unless node[:aem][:bootstrap_only] do 
+  aem_replicator "delete_extra_replication_agents" do
+    local_user node[:aem][:author][:admin_user]
+    local_password node[:aem][:author][:admin_password]
+    local_port node[:aem][:author][:port]
+    remote_hosts node[:aem][:author][:replication_hosts]
+    dynamic_cluster node[:aem][:author][:find_replication_hosts_dynamically]
+    cluster_name node[:aem][:cluster_name]
+    cluster_role node[:aem][:publish][:cluster_role]
+    type :agent
+    action :remove
+  end
 
-#Set up author agents
-aem_replicator "create_replication_agents_for_publish_servers" do
-  local_user node[:aem][:author][:admin_user]
-  local_password node[:aem][:author][:admin_password]
-  local_port node[:aem][:author][:port]
-  remote_hosts node[:aem][:author][:replication_hosts]
-  dynamic_cluster node[:aem][:author][:find_replication_hosts_dynamically]
-  cluster_name node[:aem][:cluster_name]
-  cluster_role node[:aem][:publish][:cluster_role]
-  type :agent
-  action :add
-end
+  #Set up author agents
+  aem_replicator "create_replication_agents_for_publish_servers" do
+    local_user node[:aem][:author][:admin_user]
+    local_password node[:aem][:author][:admin_password]
+    local_port node[:aem][:author][:port]
+    remote_hosts node[:aem][:author][:replication_hosts]
+    dynamic_cluster node[:aem][:author][:find_replication_hosts_dynamically]
+    cluster_name node[:aem][:cluster_name]
+    cluster_role node[:aem][:publish][:cluster_role]
+    type :agent
+    action :add
+  end
 
-#Set up replication agents
-aem_replicator "replicate_to_publish_servers" do
-  local_user node[:aem][:author][:admin_user]
-  local_password node[:aem][:author][:admin_password]
-  local_port node[:aem][:author][:port]
-  remote_hosts node[:aem][:author][:replication_hosts]
-  dynamic_cluster node[:aem][:author][:find_replication_hosts_dynamically]
-  cluster_name node[:aem][:cluster_name]
-  cluster_role node[:aem][:publish][:cluster_role]
-  type :publish
-  action :add
+  #Set up replication agents
+  aem_replicator "replicate_to_publish_servers" do
+    local_user node[:aem][:author][:admin_user]
+    local_password node[:aem][:author][:admin_password]
+    local_port node[:aem][:author][:port]
+    remote_hosts node[:aem][:author][:replication_hosts]
+    dynamic_cluster node[:aem][:author][:find_replication_hosts_dynamically]
+    cluster_name node[:aem][:cluster_name]
+    cluster_role node[:aem][:publish][:cluster_role]
+    type :publish
+    action :add
+  end
 end
