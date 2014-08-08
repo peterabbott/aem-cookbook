@@ -19,6 +19,9 @@
 
 include_attribute "apache2"
 
+default[:aem][:process_user] = "crx"
+default[:aem][:process_group] = "crx"
+
 default[:aem][:version] = nil
 default[:aem][:jvm_opts] = []
 default[:aem][:jar_opts] = []
@@ -213,3 +216,8 @@ default[:aem][:dispatcher][:enable_session_mgmt] = false
 default[:aem][:dispatcher][:mod_dispatcher_url] = nil
 default[:aem][:dispatcher][:mod_dispatcher_checksum] = nil
 default[:aem][:dispatcher][:deflate_enabled] = true
+
+default[:aem][:jacoco] = {
+	"download_url" => nil,
+	"extract_path" => "/opt/aem/jacoco"
+}

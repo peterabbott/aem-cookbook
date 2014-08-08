@@ -1,0 +1,6 @@
+[program:aem-author]
+command=java -javaagent:/opt/aem/jacoco/lib/jacocoagent.jar=output=tcpserver -Xmx1024M -jar aem-author-p4502.jar
+user=crx
+directory=/opt/aem/author/
+stopwaitsecs=30
+stopsignal=INT
