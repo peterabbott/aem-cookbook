@@ -34,7 +34,7 @@ action :wait do
   if new_resource.match_string
     curl_validation_command = %Q(curl #{creds} --silent #{validation_url} | grep "#{new_resource.match_string}")
   else
-    curl_validation_command = "curl #{creds} -o /dev/null --silent --head --write-out '%{http_code}' #{validation_url} | grep 200"
+    curl_validation_command = "curl #{creds} -o /dev/null --silent --head --write-out '%{http_code}' #{validation_url} | grep '200\|401\|302'"
   end
 
   bash "wait for URL: #{validation_url}" do

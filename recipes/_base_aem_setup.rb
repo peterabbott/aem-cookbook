@@ -16,7 +16,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-if node[:aem][:bootstrap_only]
+if node[:aem][:bootstrap_only] == true
   log "Running Bootrstrap only mode"
 
   node.default[:aem][:notification_service_command] = :nothing

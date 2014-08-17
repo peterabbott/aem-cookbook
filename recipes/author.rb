@@ -55,7 +55,7 @@ service "aem-author" do
   action [ :enable, node[:aem][:notification_service_command] ]
 end
 
-unless node[:aem][:bootstrap_only]
+if node[:aem][:bootstrap_only] == true
   if node[:aem][:version].to_f > 5.4
     node[:aem][:author][:validation_urls].each do |url|
       aem_url_watcher url do
@@ -76,30 +76,31 @@ unless node[:aem][:bootstrap_only]
       not_if {node[:aem][:bootstrap_only]}
     end
   end
-end
 
-#Change admin password
-unless node[:aem][:author][:new_admin_password].nil?
-  aem_user node[:aem][:author][:admin_user] do
-    password node[:aem][:author][:new_admin_password]
-    admin_user node[:aem][:author][:admin_user]
-    admin_password node[:aem][:author][:admin_password]
-    port node[:aem][:author][:port]
-    aem_version node[:aem][:version]
-    action :set_password
+
+  #Change admin password
+  unless node[:aem][:author][:new_admin_password].nil?
+    aem_user node[:aem][:author][:admin_user] do
+      password node[:aem][:author][:new_admin_password]
+      admin_user node[:aem][:author][:admin_user]
+      admin_password node[:aem][:author][:admin_password]
+      port node[:aem][:author][:port]
+      aem_version node[:aem][:version]
+      action :set_password
+    end
+    node.set[:aem][:author][:admin_password] = node[:aem][:author][:new_admin_password]
   end
-  node.set[:aem][:author][:admin_password] = node[:aem][:author][:new_admin_password]
-end
 
-#delete the privileged users from geometrixx, if they're still there.
-node[:aem][:geometrixx_priv_users].each do |user|
-  aem_user user do
-    admin_user node[:aem][:author][:admin_user]
-    admin_password node[:aem][:author][:admin_password]
-    port node[:aem][:author][:port]
-    aem_version node[:aem][:version]
-    path "/home/users/geometrixx"
-    action :remove
+  #delete the privileged users from geometrixx, if they're still there.
+  node[:aem][:geometrixx_priv_users].each do |user|
+    aem_user user do
+      admin_user node[:aem][:author][:admin_user]
+      admin_password node[:aem][:author][:admin_password]
+      port node[:aem][:author][:port]
+      aem_version node[:aem][:version]
+      path "/home/users/geometrixx"
+      action :remove
+    end
   end
 end
 
