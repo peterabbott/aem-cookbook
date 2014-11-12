@@ -10,6 +10,7 @@ provisioner:
 platforms:
   - name: centos-6.5
   - name: ubuntu-12.04
+  - name: ubuntu-14.04
 
 suites:
   - name: author-6.0.0-oraclejdk7
@@ -228,7 +229,9 @@ suites:
     run_list:
       - recipe[aem::dispatcher]
     attributes:
+      apache2:
+        version: 2.4
       aem:
         dispatcher:
           mod_dispatcher_url: <%= ENV['AEM_DISPATCHER_URL'] %>
-          version: '4.1.0'
+          version: '4.1.8'

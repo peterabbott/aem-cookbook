@@ -16,4 +16,4 @@ bin/*
 
 .DS_Store
 VERSION
-
+vendor/*
