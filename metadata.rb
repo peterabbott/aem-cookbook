@@ -4,7 +4,7 @@ license          'Apache 2.0'
 name             'aem'
 description      'Installs/Configures Adobe AEM'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version          IO.read(File.join(File.dirname(__FILE__), 'VERSION'))  rescue "0.0.1"
+version          IO.read(File.join(File.dirname(__FILE__), 'VERSION'))  rescue "1.2.0"
 
 recipe 'aem::author', 'Installs AEM Author instance.'
 recipe 'aem::publish', 'Installs AEM Publish instance.'
