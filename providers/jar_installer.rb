@@ -59,4 +59,7 @@ action :install do
     cwd vars[:default_context]
     code "java -jar #{jar_name} -unpack"
   end unless Object::File.exists?("#{vars[:default_context]}/crx-quickstart")
+
+  
+
 end

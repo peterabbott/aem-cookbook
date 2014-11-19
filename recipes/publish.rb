@@ -27,10 +27,25 @@ unless node[:aem][:use_yum]
   end
 end
 
+unless node[:aem][:publish][:startup_pkgs]
+  directory "#{node[:aem][:publish][:base_dir]}/install" do
+      owner "crx"
+      mode "0755"
+  end
+
+  node[:aem][:publish][:startup_pkgs].each do |pkg|
+
+    remote_file "#{node[:aem][:publish][:base_dir]}/install/#{File.basename(pkg)}" do
+      source "#{pkg}"
+      mode 0755
+    end
+  end
+end
+
 unless node[:aem][:license_url].nil?
   remote_file "#{node[:aem][:publish][:default_context]}/license.properties" do
     source "#{node[:aem][:license_url]}"
-    mode 0644
+    mode 0755
   end
 end
 
