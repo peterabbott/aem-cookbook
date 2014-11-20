@@ -33,22 +33,29 @@ unless node[:aem][:license_url].nil?
     mode 0644
   end
 end
-log "checking for startup packages #{node[:aem][:author][:startup_pkgs]}"
 
-unless node[:aem][:author][:startup_pkgs].nil?
+log "check startup" do
+    message "checking for startup packages #{node[:aem][:author][:startup_pkgs]}"
+    level :warn
+    action :write
+end
+
   directory "#{node[:aem][:author][:base_dir]}/install" do
       owner "crx"
       mode "0755"
   end
 
   node[:aem][:author][:startup_pkgs].each do |pkg|
-
+      log "check startup" do
+          message "install #{pkg} to #{node[:aem][:author][:base_dir]}/install/#{File.basename(pkg)}"
+          level :warn
+          action :write
+      end
     remote_file "#{node[:aem][:author][:base_dir]}/install/#{File.basename(pkg)}" do
       source "#{pkg}"
       mode 0755
     end
   end
-end
 
 if node[:aem][:version].to_f > 5.4 then
   node.set[:aem][:author][:runnable_jar] = "aem-author-p#{node[:aem][:author][:port]}.jar"

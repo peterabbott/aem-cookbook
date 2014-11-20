@@ -27,7 +27,6 @@ unless node[:aem][:use_yum]
   end
 end
 
-unless node[:aem][:publish][:startup_pkgs]
   directory "#{node[:aem][:publish][:base_dir]}/install" do
       owner "crx"
       mode "0755"
@@ -40,7 +39,6 @@ unless node[:aem][:publish][:startup_pkgs]
       mode 0755
     end
   end
-end
 
 unless node[:aem][:license_url].nil?
   remote_file "#{node[:aem][:publish][:default_context]}/license.properties" do
