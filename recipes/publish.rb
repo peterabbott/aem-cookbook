@@ -31,7 +31,7 @@ end
       owner "crx"
       mode "0755"
   end
-
+unless  node[:aem][:publish][:startup_pkgs].nil?  
   node[:aem][:publish][:startup_pkgs].each do |pkg|
 
     remote_file "#{node[:aem][:publish][:base_dir]}/install/#{File.basename(pkg)}" do
@@ -39,7 +39,7 @@ end
       mode 0755
     end
   end
-
+end
 unless node[:aem][:license_url].nil?
   remote_file "#{node[:aem][:publish][:default_context]}/license.properties" do
     source "#{node[:aem][:license_url]}"
