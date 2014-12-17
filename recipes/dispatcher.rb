@@ -78,7 +78,7 @@ directory conf_dir do
 end
 
 log_dir = File.dirname("#{node[:aem][:dispatcher][:log_file]}")
-directory conf_dir do
+directory log_dir do
   owner "root"
   group node[:apache][:root_group]
   mode "0775"
