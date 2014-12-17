@@ -195,7 +195,7 @@ default[:aem][:dispatcher][:statistics] = [
   ]
 default[:aem][:dispatcher][:site_name] = "00Dispatcher"
 default[:aem][:dispatcher][:server_name] = node[:fqdn]
-default[:aem][:dispatcher][:server_aliases] = []
+default[:aem][:dispatcher][:server_aliases] = [node['fqdn'], "localhost"]
 default[:aem][:dispatcher][:aem_locations] = [ "/" ]
 default[:aem][:dispatcher][:enabled] = true
 default[:aem][:dispatcher][:rewrites] = []
@@ -214,3 +214,6 @@ default[:aem][:dispatcher][:enable_session_mgmt] = false
 default[:aem][:dispatcher][:mod_dispatcher_url] = nil
 default[:aem][:dispatcher][:mod_dispatcher_checksum] = nil
 default[:aem][:dispatcher][:deflate_enabled] = true
+
+
+

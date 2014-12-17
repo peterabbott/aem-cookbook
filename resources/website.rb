@@ -26,7 +26,7 @@ attribute :server_name, :kind_of => String, :default => nil
 attribute :server_aliases, :kind_of => Array, :default => nil
 attribute :aem_locations, :kind_of => Array, :default => nil
 attribute :cache_root, :kind_of => String, :default => nil
-attribute :enabled, :kind_of => String, :default => nil
+attribute :enabled, :kind_of => [ TrueClass, FalseClass ], :default => true
 attribute :rewrites, :kind_of => Array, :default => nil
 attribute :listen_port, :kind_of => String, :default => nil
 attribute :ssl_enabled, :kind_of => [ TrueClass, FalseClass ], :default => false

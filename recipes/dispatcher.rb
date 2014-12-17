@@ -22,6 +22,8 @@ include_recipe "apache2"
 include_recipe "apache2::mod_ssl"
 include_recipe "apache2::mod_expires"
 
+log "Using Apache: #{node['apache']['version']}"
+
 aem_dispatcher 'mod_dispatcher.so' do
   package_install          node[:aem][:use_yum]
   dispatcher_uri           node[:aem][:dispatcher][:mod_dispatcher_url]
@@ -106,4 +108,26 @@ include_recipe "iptables"
 
 iptables_rule "10apache" do
   source "iptables.erb"
+end
+
+if node[:aem][:dispatcher][:enabled]
+  
+  aem_website node[:aem][:dispatcher][:site_name] do
+     action :add
+     
+     site_name node[:aem][:dispatcher][:site_name]
+     server_aliases node[:aem][:dispatcher][:server_aliases]
+     server_name node[:aem][:dispatcher][:server_name]
+     deflate_enabled node[:aem][:dispatcher][:deflate_enabled]
+     listen_port node[:aem][:dispatcher][:listen_port]
+     
+     enabled node[:aem][:dispatcher][:enabled]
+     
+     aem_locations node[:aem][:dispatcher][:aem_locations]
+     rewrites node[:aem][:dispatcher][:rewrites]
+     enable_ie_header true
+     cache_root node[:aem][:dispatcher][:cache_root]
+     notifies :restart, "service[apache2]"
+ end
+
 end

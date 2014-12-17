@@ -3,7 +3,9 @@ driver:
   name: vagrant
   customize:
     memory: '2048'
-
+  network:
+    - ["forwarded_port", {guest: 4503, host: 4503}]
+    - ["forwarded_port", {guest: 80, host: 8888}]
 provisioner:
   name: chef_zero
 
@@ -229,9 +231,12 @@ suites:
     run_list:
       - recipe[aem::dispatcher]
     attributes:
-      apache2:
-        version: 2.4
+      iptables:
+        install_rules: false
+      apache:
+        libexecdir: /usr/lib/apache2/modules
       aem:
         dispatcher:
           mod_dispatcher_url: <%= ENV['AEM_DISPATCHER_URL'] %>
           version: '4.1.8'
+          farm_name: 'we-default'
