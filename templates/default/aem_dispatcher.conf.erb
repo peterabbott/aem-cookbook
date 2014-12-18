@@ -74,6 +74,10 @@
     </ifModule>
   </filesMatch>
   <% end %>
+  
+  <% @params[:rewrites].each do |rule| %>
+  <%=   rule %>
+  <% end %>
 
   
   <% @params[:aem_locations].each do |dir| %>
@@ -132,10 +136,6 @@
   <% if ( node[:apache][:version].to_f < 2.4 ) %>
   RewriteLog <%= node[:apache][:log_dir] %>/<%= @application_name %>-rewrite.log
   RewriteLogLevel 0
-  <% end %>
-
-  <% @params[:rewrites].each do |rule| %>
-  <%=   rule %>
   <% end %>
 
 </VirtualHost>
