@@ -162,7 +162,7 @@ default[:aem][:dispatcher][:renders] = [ { :name => "publish_rend", :hostname =>
                   :port => "4503", :timeout => "0" } ]
 default[:aem][:dispatcher][:filter_rules] = {
     "0001" => '/type "deny"  /glob "*"',
-    "0023" => '/type "allow" /glob "* /content*',
+    "0023" => '/type "allow" /glob "* /content*"',
     "0002" => '/type "deny"  /glob "GET *.*[0-9].json*"',
     "0041" => '/type "allow" /glob "* *.css *"',
     "0042" => '/type "allow" /glob "* *.gif *"',

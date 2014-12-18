@@ -102,7 +102,7 @@
   </Directory>
 
   <% @params[:expire_dirs].each do |dir| %>
-  <Location <%= dir[:path] %>>
+  <Location <%= dir[:path] %> >
     <% dir[:rules].each do |rule| %>
     <%= rule %>
     <% end %>
@@ -113,7 +113,7 @@
   <Location /server-status>
     SetHandler server-status
 
-    <% if ( node[:apache][:version].to_f < 2.4 ) %>
+    <% if ( node[:apache][:version].to_f < 2.4 ) -%>
     Order Deny,Allow
     Deny from all
     <% else %>
