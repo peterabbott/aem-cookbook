@@ -155,13 +155,14 @@ default[:aem][:dispatcher][:decline_root] = "0"
 default[:aem][:dispatcher][:use_processed_url] = "0"
 default[:aem][:dispatcher][:pass_error] = "0"
 default[:aem][:dispatcher][:farm_name] = nil
-default[:aem][:dispatcher][:cache_root] = "/opt/communique/dispatcher/cache"
+default[:aem][:dispatcher][:cache_root] = "/opt/dispatcher/cache"
 default[:aem][:dispatcher][:client_headers] = [ "*" ]
 default[:aem][:dispatcher][:virtual_hosts] = [ "*" ]
 default[:aem][:dispatcher][:renders] = [ { :name => "publish_rend", :hostname => "127.0.0.1",
                   :port => "4503", :timeout => "0" } ]
 default[:aem][:dispatcher][:filter_rules] = {
     "0001" => '/type "deny"  /glob "*"',
+    "0023" => '/type "allow" /glob "* /content*',
     "0002" => '/type "deny"  /glob "GET *.*[0-9].json*"',
     "0041" => '/type "allow" /glob "* *.css *"',
     "0042" => '/type "allow" /glob "* *.gif *"',
@@ -170,6 +171,8 @@ default[:aem][:dispatcher][:filter_rules] = {
     "0045" => '/type "allow" /glob "* *.png *"',
     "0046" => '/type "allow" /glob "* *.swf *"',
     "0047" => '/type "allow" /glob "* *.jpg *"',
+    "0047" => '/type "allow" /glob "* *.ttf *"',
+    "0047" => '/type "allow" /glob "* *.woff *"',
     "0061" => '/type "allow" /glob "POST /content/[.]*.form.html"',
     "0062" => '/type "allow" /glob "* /libs/cq/personalization/*"',
     "0081" => '/type "deny"  /glob "GET *.infinity.json*"',
